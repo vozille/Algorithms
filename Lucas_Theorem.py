@@ -20,7 +20,7 @@ def Lucas_nCr(n,r,m):	# m is prime
 	r1 = '0'*(len(n1)-len(r1))+r1
 	n1 = map(int,n1)
 	r1 = map(int,r1)
-	ans = 0
+	ans = 1
 	for i in range(len(n1)):
-		ans += nCr(n1[i],r1[i])
-	return ans%m
+		ans *= nCr(n1[i],r1[i])%m
+	return ans
