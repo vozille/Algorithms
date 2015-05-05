@@ -34,7 +34,10 @@ def get_sum_till(stree,tstart,tend,qstart,qend,index):
     mid = middle(tstart,tend)
     return get_sum_till(stree,tstart,mid,qstart,qend,index*2+1)+get_sum_till(stree,mid+1,tend,qstart,qend,index*2+2)
 
-arr = [1,2,3,4,5]
-n = len(arr)
-s = tree_create(arr,n)
-print get_sum(s,n,0,1)
+#sample
+def main():
+  arr = [1,2,3,4,5]
+  n = len(arr)
+  s = tree_create(arr,n)
+  print get_sum(s,n,0,1)
+main()
