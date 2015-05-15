@@ -34,10 +34,25 @@ def get_sum_till(stree,tstart,tend,qstart,qend,index):
     mid = middle(tstart,tend)
     return get_sum_till(stree,tstart,mid,qstart,qend,index*2+1)+get_sum_till(stree,mid+1,tend,qstart,qend,index*2+2)
 
-#sample
+def update_val(arr,stree,n,i,new_value):
+    difference = new_value - arr[i]
+    arr[i] = new_value
+    update_val_till(stree,0,n-1,i,difference,0)
+
+def update_val_till(stree,tstart,tend,i,difference,index):
+    if i < tstart or i > tend:
+        return
+    stree[index] += difference
+    if tstart != tend:
+        mid = middle(tstart,tend)
+        update_val_till(stree,tstart,mid,i,difference,2*index+1)
+        update_val_till(stree,mid+1,tend,i,difference,2*index+2)
+
 def main():
   arr = [1,2,3,4,5]
   n = len(arr)
   s = tree_create(arr,n)
-  print get_sum(s,n,0,1)
+  print get_sum(s,n,0,2)
+  update_val(arr,s,n,1,10)
+  print get_sum(s,n,0,2)
 main()
