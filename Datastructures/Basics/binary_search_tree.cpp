@@ -68,6 +68,8 @@ void search_node_bst(struct btree *tree,int n,string foo)
 	string ans = foo;
 	if(s == NULL or s->data == n)
 	{
+		if(s == NULL)
+			ans = "Doesnt exist";
 		cout << ans << endl;
 		return;
 	}
@@ -83,6 +85,23 @@ void search_node_bst(struct btree *tree,int n,string foo)
 	}
 }
 
+struct btree *insert_node_bst(struct btree *tree,int n)
+{
+	struct btree *s = tree;
+	struct btree *new_node = (struct btree *)malloc(sizeof(struct btree));
+	if(s == NULL)
+	{
+		new_node->data = n;
+		new_node->left = NULL;
+		new_node->right = NULL;
+		return(new_node);
+	}
+	else if(s->data < n)
+		s->right = insert_node_bst(s->right,n);
+	else
+		s->left = insert_node_bst(s->left,n);
+}
+
 int main(void)
 {
 	struct btree *s;
@@ -91,15 +110,18 @@ int main(void)
 	s->left->left = add_node(8);
 	s->left->right = add_node(1);
 	s->right = add_node(7);
+
 	int i,n = count(s);
 	vector <int> arr;
 	get_nodes(s,arr);
 	sort(arr.begin(),arr.end());
-
 	struct btree *fff = s;
 	convert_to_BST(fff,arr);
-	//traverse_inorder(fff);
-	search_node_bst(fff,1,"root");
-
+	
+	search_node_bst(fff,11,"root");
+	insert_node_bst(fff,25);
+	insert_node_bst(fff,10);
+	search_node_bst(fff,25,"root");
+	search_node_bst(fff,10,"root");
 	return 0;
 }
