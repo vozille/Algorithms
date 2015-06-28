@@ -1,3 +1,6 @@
+import sys
+sys.stdin = open("input.txt","r")
+# Fully upgraded Segment Tree
 import math
 """
 if you are not me...
@@ -9,50 +12,103 @@ if you are not me...
 def middle(start,end):
     return start + (end-start)/2
 
-def tree_create(arr,n):
+def MintreeCreate(arr,n):
     h = int(math.ceil(math.log(n,2)))
     stree = [0]*(2*2**h-1)
-    fill(stree,0,n-1,arr,0)
+    fillMin(stree,0,n-1,arr,0)
     return stree
-def fill(stree,tstart,tend,arr,index):
+def fillMin(stree,tstart,tend,arr,index):
     if tstart == tend:
         stree[index] = arr[tstart]
         return arr[tstart]
     else:
         mid = middle(tstart,tend)
-        stree[index] = fill(stree,tstart,mid,arr,index*2+1)+fill(stree,mid+1,tend,arr,index*2+2)
+        stree[index] = min(fillMin(stree,tstart,mid,arr,index*2+1),fillMin(stree,mid+1,tend,arr,index*2+2))
     return stree[index]
 
-def get_sum(stree,n,qstart,qend):
-    return get_sum_till(stree,0,n-1,qstart,qend,0)
+def MaxtreeCreate(arr,n):
+    h = int(math.ceil(math.log(n,2)))
+    stree = [0]*(2*2**h-1)
+    fillMax(stree,0,n-1,arr,0)
+    return stree
+def fillMax(stree,tstart,tend,arr,index):
+    if tstart == tend:
+        stree[index] = arr[tstart]
+        return arr[tstart]
+    else:
+        mid = middle(tstart,tend)
+        stree[index] = max(fillMax(stree,tstart,mid,arr,index*2+1),fillMax(stree,mid+1,tend,arr,index*2+2))
+    return stree[index]
 
-def get_sum_till(stree,tstart,tend,qstart,qend,index):
+def SumtreeCreate(arr,n):
+    h = int(math.ceil(math.log(n,2)))
+    stree = [0]*(2*2**h-1)
+    fillSum(stree,0,n-1,arr,0)
+    return stree
+def fillSum(stree,tstart,tend,arr,index):
+    if tstart == tend:
+        stree[index] = arr[tstart]
+        return arr[tstart]
+    else:
+        mid = middle(tstart,tend)
+        stree[index] = (fillSum(stree,tstart,mid,arr,index*2+1)+fillSum(stree,mid+1,tend,arr,index*2+2))
+    return stree[index]
+
+
+def getSum(stree,n,qstart,qend):
+    return getSumTill(stree,0,n-1,qstart,qend,0)
+
+def getSumTill(stree,tstart,tend,qstart,qend,index):
     if qstart <= tstart and qend >= tend:
         return stree[index]
     if tend < qstart or tstart > qend:
         return 0
     mid = middle(tstart,tend)
-    return get_sum_till(stree,tstart,mid,qstart,qend,index*2+1)+get_sum_till(stree,mid+1,tend,qstart,qend,index*2+2)
+    return getSumTill(stree,tstart,mid,qstart,qend,index*2+1)+getSumTill(stree,mid+1,tend,qstart,qend,index*2+2)
 
-def update_val(arr,stree,n,i,new_value):
+def getMin(stree,n,qstart,qend):
+    return getMinTill(stree,0,n-1,qstart,qend,0)
+
+def getMinTill(stree,tstart,tend,qstart,qend,index):
+    if qstart <= tstart and qend >= tend:
+        return stree[index]
+    if tend < qstart or tstart > qend:
+        return 10**50
+    mid = middle(tstart,tend)
+    return min(getMinTill(stree,tstart,mid,qstart,qend,index*2+1),getMinTill(stree,mid+1,tend,qstart,qend,index*2+2))
+
+def getMax(stree,n,qstart,qend):
+    return getMaxTill(stree,0,n-1,qstart,qend,0)
+
+def getMaxTill(stree,tstart,tend,qstart,qend,index):
+    if qstart <= tstart and qend >= tend:
+        return stree[index]
+    if tend < qstart or tstart > qend:
+        return -10**50
+    mid = middle(tstart,tend)
+    return max(getMaxTill(stree,tstart,mid,qstart,qend,index*2+1),getMaxTill(stree,mid+1,tend,qstart,qend,index*2+2))
+
+def updateVal(arr,stree,n,i,new_value):
     difference = new_value - arr[i]
     arr[i] = new_value
-    update_val_till(stree,0,n-1,i,difference,0)
+    updateValTill(stree,0,n-1,i,difference,0)
 
-def update_val_till(stree,tstart,tend,i,difference,index):
+def updateValTill(stree,tstart,tend,i,difference,index):
     if i < tstart or i > tend:
         return
     stree[index] += difference
     if tstart != tend:
         mid = middle(tstart,tend)
-        update_val_till(stree,tstart,mid,i,difference,2*index+1)
-        update_val_till(stree,mid+1,tend,i,difference,2*index+2)
+        updateValTill(stree,tstart,mid,i,difference,2*index+1)
+        updateValTill(stree,mid+1,tend,i,difference,2*index+2)
 
-def main():
-  arr = [1,2,3,4,5]
-  n = len(arr)
-  s = tree_create(arr,n)
-  print get_sum(s,n,0,2)
-  update_val(arr,s,n,1,10)
-  print get_sum(s,n,0,2)
-main()
+n,q = map(int,raw_input().split())
+arr = map(int,raw_input().split())
+MinSegmentTree = MintreeCreate(arr,n)
+MaxSegmentTree = MaxtreeCreate(arr,n)
+while q > 0:
+    q -= 1
+    left,right = map(int,raw_input().split())
+    left -= 1
+    right -= 1
+    print getMax(MaxSegmentTree,n,left,right)-getMin(MinSegmentTree,n,left,right)
