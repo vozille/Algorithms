@@ -48,3 +48,20 @@ int main(void)
     cout << ans << '\n';
     return 0;
 }
+
+
+def BFS(graph,start,distance,visited,ctr):
+    distance[start] = min(distance[start],ctr)
+    visited[start] = 1
+    q = []
+    q.append(start)
+    while len(q) != 0:
+        x = q[0]
+        q.pop(0)
+        ctr = distance[x] + 1
+        for i in graph[x]:
+            if not visited[i]:
+                q.append(i)
+                visited[i] = 1
+                distance[i] = min(distance[i],ctr)
+    return distance
