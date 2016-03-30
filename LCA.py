@@ -8,6 +8,7 @@ class LowestCommonAncestor:
         :param root: the root vertex
         :return: void
         """
+        self.root = root
         self.graph = graph
         self.visited = [0 for i in range(size + 1)]
         self.prev = [-1 for i in range(size + 1)]
@@ -52,8 +53,11 @@ class LowestCommonAncestor:
         Finds lowest common ancestor
         :param u: vertex u
         :param v: vertex v
-        :return: integer distance between u and v
+        :return: lowest common ancestor of u and v
         """
+        if u == self.root or v == self.root:
+            return self.root
+
         if self.depth[u] < self.depth[v]:
             u,v = v,u
         log = int(math.log(self.depth[u],2))
