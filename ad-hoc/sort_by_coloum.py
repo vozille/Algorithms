@@ -1,13 +1,9 @@
 import operator
-from operator import *
-m,n = map(int,raw_input().split())
-s = []
-for i in range(m):
-    foo = map(int,raw_input().split())
-    s.append(foo)
-k = input()
+
+s = [[1,2,3],[5,1,7],[3,0,9]]
+k = 1
 s = sorted(s, key=operator.itemgetter(k))
-for i in range(m):
-    for j in s[i]:
+for i in s:
+    for j in i:
         print j,
     print ''

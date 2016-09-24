@@ -1,3 +1,9 @@
+"""
+Given two arrays with same elements,
+find the minimum number of swaps to convert one to the other
+
+say [1, 2, 3] and [3, 1, 2] requires 2 swaps
+"""
 def merge_and_count(a, b):
     assert a == sorted(a) and b == sorted(b)
     c = []
@@ -16,7 +22,7 @@ def merge_and_count(a, b):
 
 def sort_and_count(L):
     if len(L) == 1: return 0, L
-    n = len(L)/ 2 
+    n = len(L)/ 2
     a, b = L[:n], L[n:]
     ra, a = sort_and_count(a)
     rb, b = sort_and_count(b)
@@ -32,7 +38,7 @@ def get_permutation(L1, L2):
     return permutation
 
 def number_of_swaps(permutation):
-    
+
     nswaps = 0
     seen = set()
     for i in xrange(len(permutation)):
@@ -44,8 +50,7 @@ def number_of_swaps(permutation):
                 nswaps += 1
     return nswaps
 
-for _ in range(input()):
-    n = input()
-    a = map(int,raw_input().split())
-    b = map(int,raw_input().split())
-    print number_of_swaps(get_permutation(a,b))
+a = [1, 2, 3]
+b = [3, 1, 2]
+
+print number_of_swaps(get_permutation(a,b))

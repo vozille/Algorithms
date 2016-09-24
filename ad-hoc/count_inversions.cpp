@@ -1,14 +1,17 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
 typedef long long llong;
 
 const int MAXN = 500020;
-llong tree[MAXN], A[MAXN], B[MAXN];
 
+// binary indexed trees
+llong tree[MAXN], A[MAXN], B[MAXN];
+// find sum upto idx
 llong read(int idx) {
 	llong sum = 0;
 	while (idx > 0) {
@@ -17,7 +20,7 @@ llong read(int idx) {
 	}
 	return sum;
 }
-
+// update binary indexed trees
 void update(int idx, llong val) {
 	while (idx <= MAXN) {
 		tree[idx] += val;
@@ -26,35 +29,34 @@ void update(int idx, llong val) {
 }
 
 int main(void) {
-	freopen("input.txt", "r", stdin);
-	int N,tc;
-	scanf("%d", &tc);
-	while (tc--) {
-		scanf("%d", &N);
-		memset(tree, 0, sizeof(tree));
-		for (int i = 0; i < N; ++i) {
-			scanf("%lld", &A[i]);
-			B[i] = A[i];
-		}
-		sort(B, B + N);
-		for (int i = 0; i < N; ++i) {
-			int rank = int(lower_bound(B, B + N, A[i]) - B);
-			A[i] = rank + 1;
-		}
-		int inv_count = 0;
-		for (int i = N - 1; i >= 0; --i) {
-			int x = read(A[i] - 1);
-			if (x > 2){
-				inv_count = -1;
-				break;
-			}
-			inv_count += x;
-			update(A[i], 1);
-		}
-		if(inv_count < 0)
-			printf("%s\n", "Too chaotic");
-		else
-			printf("%lld\n", inv_count);
+
+	int N;
+	// N is size of array
+	// Enter the array
+	scanf("%d", &N);
+	memset(tree, 0, sizeof(tree));
+
+	for (int i = 0; i < N; ++i) {
+		scanf("%lld", &A[i]);
+		B[i] = A[i];
 	}
+
+	sort(B, B + N);
+	// inversion counted by comparing it to the sorted elements
+	for (int i = 0; i < N; ++i) {
+		int rank = int(lower_bound(B, B + N, A[i]) - B);
+		A[i] = rank + 1;
+	}
+	for(int i = 0; i < N; i++){
+		cout << A[i] << " ";
+	}
+	// counts number of inversion
+	int inv_count = 0;
+	for (int i = N - 1; i >= 0; --i) {
+		int x = read(A[i] - 1);
+		inv_count += x;
+		update(A[i], 1);
+	}
+	printf("%d\n", inv_count);
 	return 0;
 }
