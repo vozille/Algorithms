@@ -9,7 +9,7 @@ using namespace std;
 
 typedef long long ll;
 const int MOD = 1e9+7;
-const double ESP = 1e-9;
+const double ESP = 1e - 9;
 
 vector< vector <int> > >graph;
 bool visited[100005];
